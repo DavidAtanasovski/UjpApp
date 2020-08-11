@@ -1,0 +1,50 @@
+﻿@page
+@model WorldUjp.Pages.TaxPayer.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Tax Payers</h1>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Products</th>
+                <th>Total Spent</th>
+                <th>Returned</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var taxPayer in Model.TaxPayers)
+        {
+            <tr>
+                <td>
+                    @taxPayer.FirstName @taxPayer.LastName
+                </td>
+                <td>
+                    @taxPayer.Products.Count()
+                </td>
+                <td>
+                    @taxPayer.Products.Sum(y => y.Price).ToString("C")
+                </td>
+                <td>
+                    @((taxPayer.Products.Sum(y => y.Price * y.DDV.Tax) * taxPayer.Country.TaxReturnPolicy)?.ToString("C"))
+                </td>
+                <td>
+                    <a class="btn btn-outline-secondary" asp-page="/Product/Index" asp-route-id="@taxPayer.Id">
+                        Buy Products
+                    </a>
+                </td>
+            </tr>
+        }
+        <tfoot style="visibility:@(!Model.TaxPayers.Any() ? "visible" : "hidden")">
+            <tr>
+                <td colspan="3">
+                    Nothing to display.
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

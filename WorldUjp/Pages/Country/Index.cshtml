@@ -1,0 +1,40 @@
+﻿@page
+@model WorldUjp.Pages.Country.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Countries</h1>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Tax Return Policy</th>
+                <th>Tax Payers</th>
+            </tr>
+        </thead>
+        @foreach (var country in Model.Countries)
+        {
+            <tr>
+                <td>
+                    @country.Name
+                </td>
+                <td>
+                    @country.TaxReturnPolicy?.ToString("P")
+                </td>
+                <td>
+                    @country.TaxPayers.Count()
+                </td>
+            </tr>
+        }
+        <tfoot style="visibility:@(!Model.Countries.Any() ? "visible" : "hidden")">
+            <tr>
+                <td colspan="3">
+                    Nothing to display.
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+

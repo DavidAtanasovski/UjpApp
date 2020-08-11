@@ -1,0 +1,45 @@
+﻿@page "{id}"
+@model WorldUjp.Pages.Product.IndexModel
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<h1>Products</h1>
+<div>
+    <partial name="_TaxPayerInfo" model="@Model.TaxPayer" />
+    <div class="form-row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>DDV</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.TaxPayer.Products)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Price.ToString("C")
+                    </td>
+                    <td>
+                        @item.DDV.Tax.ToString("p")
+                    </td>
+                </tr>
+            }
+            <tfoot style="visibility:@(!Model.TaxPayer.Products.Any() ? "visible" : "hidden")">
+                <tr>
+                    <td colspan="3">
+                        Nothing to display.
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary" asp-page="./Create" asp-route-id="@Model.TaxPayer.Id">Add Product</a>
+    </div>
+</div>

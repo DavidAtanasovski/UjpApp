@@ -1,0 +1,95 @@
+﻿@page "{id}"
+@model WorldUjp.Pages.ProductModel
+@{
+    ViewData["Title"] = "Product";
+}
+
+<h1>Product Management</h1>
+<form method="post">
+    <input type="hidden" asp-for="@Model.TaxPayer.Id" />
+    <div class="form-row">
+        <div class="form-group col-sm-6">
+            <label asp-for="TaxPayer.FirstName"></label>
+            <input class="form-control" asp-for="TaxPayer.FirstName" readonly />
+        </div>
+        <div class="form-group col-sm-6">
+            <label asp-for="TaxPayer.LastName"></label>
+            <input class="form-control" asp-for="TaxPayer.LastName" readonly />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-4">
+            <label asp-for="Product.Name"></label>
+            <input class="form-control" asp-for="Product.Name" />
+        </div>
+        <div class="form-group col-sm-4">
+            <label asp-for="Product.Price"></label>
+            <input class="form-control" asp-for="Product.Price" />
+        </div>
+        <div class="form-group col-sm-3">
+            <label asp-for="Product.DDV"></label>
+            <select class="form-control" asp-for="Product.DDVId" asp-items="@Model.DDVs">
+                <option value="">Pick a DDV</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-1 d-flex">
+            <button type="submit" class="btn btn-secondary align-self-sm-end" asp-page-handler="Buy">Buy</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-4">
+            <span class="text-danger" asp-validation-for="Product.Name"></span>
+        </div>
+        <div class="form-group col-sm-4">
+            <span class="text-danger" asp-validation-for="Product.Price"></span>
+        </div>
+        <div class="form-group col-sm-3">
+            <span class="text-danger" asp-validation-for="Product.DDVId"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>DDV</th>
+                </tr>
+            </thead>
+            @for (var i = 0; i < Model.FiscalReceipt.Products.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.FiscalReceipt.Products[i].Name
+                    </td>
+                    <td>
+                        @Model.FiscalReceipt.Products[i].Price.ToString("C")
+                    </td>
+                    <td>
+                        @Model.FiscalReceipt.Products[i].DDV.Tax.ToString("p");
+                        <input type="hidden" asp-for="@Model.FiscalReceipt.Products[i].DDVId" />
+                        <input type="hidden" asp-for="@Model.FiscalReceipt.Products[i].Name" />
+                        <input type="hidden" asp-for="@Model.FiscalReceipt.Products[i].Price" />
+                        <input type="hidden" asp-for="@Model.FiscalReceipt.Products[i].DDV.Tax" />
+                        <input type="hidden" asp-for="@Model.FiscalReceipt.Products[i].DDV.Id" />
+                    </td>
+                </tr>
+            }
+            <tfoot style="visibility:@(!Model.FiscalReceipt.Products.Any() ? "visible" : "hidden")">
+                <tr>
+                    <td colspan="3">
+                        Nothing to display.
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" asp-page-handler="">Save</button>
+    </div>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-info">@Model.Message</div>
+}
